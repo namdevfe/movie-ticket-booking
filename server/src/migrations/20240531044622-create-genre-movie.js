@@ -2,40 +2,26 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('GenreMovies', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false
-      },
-      password: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      username: {
-        type: Sequelize.STRING
-      },
-      phone: {
-        type: Sequelize.STRING,
-        unique: true
-      },
-      address: {
-        type: Sequelize.TEXT
-      },
-      bookings: {
-        type: Sequelize.TEXT
-      },
-      groupId: {
+      genreId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Groups',
+          model: 'Genres',
+          key: 'id'
+        }
+      },
+      movieId: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        references: {
+          model: 'Movies',
           key: 'id'
         }
       },
@@ -51,6 +37,6 @@ module.exports = {
   },
   // eslint-disable-next-line no-unused-vars
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users')
+    await queryInterface.dropTable('GenreMovies')
   }
 }

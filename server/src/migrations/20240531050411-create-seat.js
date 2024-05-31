@@ -2,40 +2,38 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Users', {
+    await queryInterface.createTable('Seats', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      email: {
-        type: Sequelize.STRING,
-        unique: true,
+      row: {
+        type: Sequelize.INTEGER,
         allowNull: false
       },
-      password: {
-        type: Sequelize.STRING,
+      column: {
+        type: Sequelize.INTEGER,
         allowNull: false
       },
-      username: {
-        type: Sequelize.STRING
+      seatType: {
+        type: Sequelize.ENUM,
+        values: ['NORMAL', 'VIP']
       },
-      phone: {
-        type: Sequelize.STRING,
-        unique: true
+      price: {
+        type: Sequelize.FLOAT,
+        allowNull: false
       },
-      address: {
-        type: Sequelize.TEXT
+      status: {
+        type: Sequelize.ENUM,
+        values: ['AVAILABLE', 'UNAVAILABLE']
       },
-      bookings: {
-        type: Sequelize.TEXT
-      },
-      groupId: {
+      screenId: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
-          model: 'Groups',
+          model: 'Screens',
           key: 'id'
         }
       },
@@ -51,6 +49,6 @@ module.exports = {
   },
   // eslint-disable-next-line no-unused-vars
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Users')
+    await queryInterface.dropTable('Seats')
   }
 }

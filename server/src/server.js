@@ -6,10 +6,6 @@ const app = express()
 
 connectDB()
 
-app.get('/', (req, res) => {
-  res.send(`Hi I am ${env.AUTHOR}`)
-})
-
 app.listen(env.APP_PORT, env.APP_HOST, () => {
   // eslint-disable-next-line no-console
   console.log(
