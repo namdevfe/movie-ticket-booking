@@ -14,7 +14,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Role.init(
     {
-      url: DataTypes.STRING
+      url: DataTypes.STRING,
+      description: DataTypes.TEXT
     },
     {
       sequelize,

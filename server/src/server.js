@@ -7,6 +7,8 @@ import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware'
 const START_SERVER = () => {
   const app = express()
 
+  // Enable receive data from x-www-form-urlencode mode
+  app.use(express.urlencoded({ extended: true }))
   app.use(express.json())
 
   connectDB()

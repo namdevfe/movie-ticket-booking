@@ -16,7 +16,10 @@ const createNew = async ({ name, description }) => {
     })
 
     if (!created)
-      throw new ApiError(StatusCodes.UNPROCESSABLE_ENTITY, 'Create new failed.')
+      throw new ApiError(
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        'Create new group user failed.'
+      )
     return group
   } catch (error) {
     throw error
