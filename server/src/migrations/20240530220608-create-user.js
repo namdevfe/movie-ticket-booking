@@ -21,6 +21,9 @@ module.exports = {
       username: {
         type: Sequelize.STRING
       },
+      avatar: {
+        type: Sequelize.STRING
+      },
       phone: {
         type: Sequelize.STRING,
         unique: true
