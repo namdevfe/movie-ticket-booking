@@ -1,11 +1,9 @@
 import express from 'express'
+import authController from '~/controllers/authController'
+import authValidation from '~/validations/authValidation'
 
 const router = express.Router()
 
-router.post('/register', (req, res) => {
-  return res.json({
-    message: 'API REGISTER is ready to use.'
-  })
-})
+router.post('/register', authValidation.register, authController.register)
 
 export default router
