@@ -13,8 +13,22 @@ const register = async (req, res, next) => {
   }
 }
 
+const login = async (req, res, next) => {
+  try {
+    const userData = await authService.login(req.body)
+    return res.status(StatusCodes.OK).json({
+      statusCode: StatusCodes.OK,
+      message: 'Login is successfully',
+      data: userData
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
-  register
+  register,
+  login
 }
 
 export default authController

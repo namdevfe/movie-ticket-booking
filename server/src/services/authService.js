@@ -1,7 +1,9 @@
+/* eslint-disable no-useless-catch */
+import bcrypt from 'bcrypt'
 import { StatusCodes } from 'http-status-codes'
 import db from '~/models'
 import ApiError from '~/utils/ApiError'
-import bcrypt from 'bcrypt'
+import { generateToken } from '~/utils/jwt'
 
 const SALT_ROUNDS = 10
 
@@ -11,8 +13,11 @@ const hashPassword = (password) => {
   return passwordHashed
 }
 
+const comparePassword = (password, hash) => {
+  return bcrypt.compareSync(password, hash)
+}
+
 const register = async (data) => {
-  // eslint-disable-next-line no-useless-catch
   try {
     // Create user with admin group
     if (data?.groupId) {
@@ -57,8 +62,51 @@ const register = async (data) => {
   }
 }
 
+const login = async ({ email, password }) => {
+  try {
+    // STEP 1: Check user
+    const user = await db.User.findOne({
+      where: {
+        email
+      }
+    })
+
+    if (!user?.id)
+      throw new ApiError(
+        StatusCodes.UNAUTHORIZED,
+        'Email is not exist. Please try again.'
+      )
+
+    // STEP 2: Check password
+    const isPasswordChecked = comparePassword(password, user.password)
+    if (!isPasswordChecked)
+      throw new ApiError(
+        StatusCodes.UNAUTHORIZED,
+        'Email or password invalid. Please try again.'
+      )
+
+    // STEP 3: Generate accessToken if password passed
+    const accessToken = generateToken(
+      {
+        userId: user.id,
+        email: user.email,
+        groupId: user.groupId
+      },
+      '5d'
+    )
+
+    return {
+      accessToken: accessToken,
+      refreshToken: 'refreshToken'
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
-  register
+  register,
+  login
 }
 
 export default authService
