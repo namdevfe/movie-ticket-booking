@@ -4,7 +4,8 @@ import './globals.scss'
 
 const roboto = Roboto({
   subsets: ['vietnamese', 'latin'],
-  weight: ['400', '500', '700', '900']
+  weight: ['400', '500', '700', '900'],
+  display: 'fallback'
 })
 
 export const metadata: Metadata = {
