@@ -4,6 +4,10 @@ import groupValidation from '~/validations/groupValidation'
 
 const router = express.Router()
 
-router.post('/', groupValidation.createNew, groupController.createNewGroup)
+router.post(
+  '/create',
+  groupValidation.createNew,
+  groupController.createNewGroup
+)
 
 export default router

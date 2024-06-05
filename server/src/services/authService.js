@@ -85,12 +85,27 @@ const login = async ({ email, password }) => {
         'Email or password invalid. Please try again.'
       )
 
+    // Find roles base on groupId
+    const group = await db.Group.findOne({
+      where: {
+        id: user.groupId
+      },
+      include: [
+        {
+          model: db.Role,
+          attributes: ['id', 'url', 'description'],
+          as: 'roles',
+          through: { attributes: [] }
+        }
+      ]
+    })
+
     // STEP 3: Generate accessToken if password passed
     const accessToken = generateToken(
       {
         userId: user.id,
         email: user.email,
-        groupId: user.groupId
+        group
       },
       '5d'
     )

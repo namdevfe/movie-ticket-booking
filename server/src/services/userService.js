@@ -9,7 +9,11 @@ const getProfile = async ({ userId }) => {
       },
       include: [
         {
-          model: db.Group
+          model: db.Group,
+          as: 'group',
+          attributes: {
+            exclude: ['createdAt', 'updatedAt']
+          }
         }
       ],
       raw: true,

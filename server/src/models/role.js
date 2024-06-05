@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      Role.belongsToMany(models.Group, { through: 'GroupRole' })
     }
   }
   Role.init(

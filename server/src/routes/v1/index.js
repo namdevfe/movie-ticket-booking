@@ -1,15 +1,19 @@
+import verifyToken from '~/middlewares/jwtMiddleware'
 import authRoutes from './authRoute'
 import groupRoutes from './groupRoute'
 import roleRoutes from './roleRoute'
 import userRoutes from './userRoute'
-
-const BASE_URL = '/api/v1'
+import { BASE_URL_API_V1 } from '~/utils/constants'
+import verifyPermission from '~/middlewares/verifyPermission'
 
 const initRoutes = (app) => {
-  app.use(`${BASE_URL}/auth`, authRoutes)
-  app.use(`${BASE_URL}/group`, groupRoutes)
-  app.use(`${BASE_URL}/role`, roleRoutes)
-  app.use(`${BASE_URL}/user`, userRoutes)
+  // Check all routes exclude public routes
+  app.all('*', verifyToken, verifyPermission)
+
+  app.use(`${BASE_URL_API_V1}/auth`, authRoutes)
+  app.use(`${BASE_URL_API_V1}/group`, groupRoutes)
+  app.use(`${BASE_URL_API_V1}/role`, roleRoutes)
+  app.use(`${BASE_URL_API_V1}/user`, userRoutes)
 }
 
 export default initRoutes
