@@ -10,6 +10,7 @@ const RegisterForm = () => {
         id='email'
         name='email'
         placeholder='Enter your email...'
+        // error='test error'
       />
 
       <Input
@@ -18,9 +19,10 @@ const RegisterForm = () => {
         id='password'
         name='password'
         placeholder='Enter your password...'
+        // error='test error'
         containerStyle='mt-4'
       />
-      <Button className='mt-14 w-full' type='button'>
+      <Button className='mt-6 w-full' type='button'>
         Register
       </Button>
     </form>

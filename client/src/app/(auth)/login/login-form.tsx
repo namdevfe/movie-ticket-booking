@@ -1,9 +1,32 @@
-import React from 'react'
+import Button from '@/components/button'
+import Input from '@/components/input'
 
-type Props = {}
+const LoginForm = () => {
+  return (
+    <form className='min-w-[263px] mt-16' method='POST'>
+      <Input
+        label='Email'
+        type='text'
+        id='email'
+        name='email'
+        placeholder='Enter your email...'
+        // error='test error'
+      />
 
-const LoginForm = (props: Props) => {
-  return <div>LoginForm</div>
+      <Input
+        label='Password'
+        type='password'
+        id='password'
+        name='password'
+        placeholder='Enter your password...'
+        // error='test error'
+        containerStyle='mt-4'
+      />
+      <Button className='mt-6 w-full' type='button'>
+        Login
+      </Button>
+    </form>
+  )
 }
 
 export default LoginForm

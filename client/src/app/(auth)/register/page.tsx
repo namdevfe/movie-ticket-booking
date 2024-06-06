@@ -1,5 +1,6 @@
 import RegisterForm from '@/app/(auth)/register/register-form'
 import Image from 'next/image'
+import Link from 'next/link'
 
 const RegisterPage = () => {
   return (
@@ -16,6 +17,12 @@ const RegisterPage = () => {
           </div>
           <h1 className='text-4xl'>Create Account</h1>
           <RegisterForm />
+          <Link
+            href='/login'
+            className='block text-sm text-sky-blue mt-6 text-center mx-auto transition-colors duration-300'
+          >
+            Do you already have an account ?
+          </Link>
         </div>
       </div>
     </main>
