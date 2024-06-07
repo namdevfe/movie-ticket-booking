@@ -1,15 +1,19 @@
 import express from 'express'
+import cors from 'cors'
 import { env } from './config/environment'
 import connectDB from './config/connectDB'
 import initRoutes from './routes/v1'
 import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware'
+import { corsOptions } from '~/config/cors'
 
 const START_SERVER = () => {
   const app = express()
 
+  app.use(cors(corsOptions))
+
   // Enable receive data from x-www-form-urlencode mode
-  app.use(express.urlencoded({ extended: true }))
   app.use(express.json())
+  app.use(express.urlencoded({ extended: true }))
 
   connectDB()
 
