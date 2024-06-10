@@ -6,7 +6,7 @@ import { message, regex, regexMessage } from '@/constants/validate'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
-type RegisterBodyTypes = {
+type RegisterBodyType = {
   email: string
   username: string
   password: string
@@ -17,9 +17,9 @@ const RegisterForm = () => {
     register,
     handleSubmit,
     formState: { errors }
-  } = useForm<RegisterBodyTypes>()
+  } = useForm<RegisterBodyType>()
 
-  const onSubmit = async (data: RegisterBodyTypes) => {
+  const onSubmit = async (data: RegisterBodyType) => {
     const payload = { ...data }
     try {
       const res = await fetch(
