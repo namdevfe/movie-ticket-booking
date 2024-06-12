@@ -2,15 +2,11 @@
 
 import Button from '@/components/button'
 import Input from '@/components/input'
+import envConfig from '@/config/environment'
 import { message, regex, regexMessage } from '@/constants/validate'
+import { RegisterBodyType } from '@/types/auth'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
-
-type RegisterBodyType = {
-  email: string
-  username: string
-  password: string
-}
 
 const RegisterForm = () => {
   const {
@@ -19,11 +15,13 @@ const RegisterForm = () => {
     formState: { errors }
   } = useForm<RegisterBodyType>()
 
+  // Handle Register
   const onSubmit = async (data: RegisterBodyType) => {
     const payload = { ...data }
+
     try {
       const res = await fetch(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
+        `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
         {
           method: 'POST',
           headers: {
@@ -32,9 +30,19 @@ const RegisterForm = () => {
           body: JSON.stringify(payload)
         }
       )
-      if (!res.ok) throw new Error('Registration failed. Please try again.')
-      const data: { message: string; statusCode: number } = await res.json()
-      toast.success(data.message || 'Register is successfully. Please login.')
+
+      const registerRes: { message: string; statusCode: number } =
+        await res.json()
+
+      if (!res.ok)
+        throw new Error(
+          registerRes.message || 'Registration failed. Please try again.'
+        )
+
+      // Notification
+      toast.success(
+        registerRes.message || 'Register is successfully. Please login.'
+      )
     } catch (error: any) {
       toast.error(error.message)
     }

@@ -21,7 +21,7 @@ const LoginPage = () => {
             href='/register'
             className='block text-sm text-sky-blue mt-6 text-center mx-auto transition-colors duration-300'
           >
-            Don not have an account ?
+            Do not have an account ?
           </Link>
         </div>
       </div>
