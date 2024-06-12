@@ -1,17 +1,13 @@
+import accountService from '@/services/account-service'
 import { cookies } from 'next/headers'
 
 const MeProfilePage = async () => {
   const cookieStore = cookies()
-  const accessToken = cookieStore.get('token')
+  const accessToken = cookieStore.get('token')?.value
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/user/view`, {
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken?.value}`
-    }
-  })
+  const profile = await accountService.getProfile(accessToken ?? '')
 
-  const meProfile = await res.json()
+  console.log('🚀profile---->', profile)
 
   return <div>MeProfilePage</div>
 }

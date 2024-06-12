@@ -17,3 +17,8 @@ export type LoginResType = {
     refreshToken: string
   }
 }
+
+export type RegisterResType = {
+  statusCode: number
+  message: string
+}

@@ -1,11 +1,7 @@
 'use client'
 
-import { ReactNode, createContext, useContext, useState } from 'react'
-
-export const AppContext = createContext({
-  token: '',
-  setToken: (token: string) => {}
-})
+import { clientAccessToken } from '@/utils/http'
+import { ReactNode, useContext, useState } from 'react'
 
 type AppProviderProps = {
   children: ReactNode
@@ -13,19 +9,12 @@ type AppProviderProps = {
 }
 
 const AppProvider = ({ children, initialToken }: AppProviderProps) => {
-  const [token, setToken] = useState(initialToken || '')
-  return (
-    <AppContext.Provider value={{ token, setToken }}>
-      {children}
-    </AppContext.Provider>
-  )
-}
-
-export const useAppContext = () => {
-  const context = useContext(AppContext)
-  if (!AppContext)
-    throw new Error('useAppContext must be used within an AppProvider')
-  return context
+  useState(() => {
+    if (typeof window !== 'undefined') {
+      clientAccessToken.value = initialToken ?? ''
+    }
+  })
+  return <>{children}</>
 }
 
 export default AppProvider

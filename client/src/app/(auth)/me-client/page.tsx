@@ -1,38 +1,21 @@
 'use client'
 
-import { useAppContext } from '@/context/app-provider'
-import { useEffect, useState } from 'react'
+import accountService from '@/services/account-service'
+import { clientAccessToken } from '@/utils/http'
+import { useEffect } from 'react'
 
 const MeClientPage = () => {
-  const { token } = useAppContext()
-  const [profile, setProfile] = useState()
+  const accessToken = clientAccessToken.value
+  console.log('🚀accessToken---->', accessToken)
 
   useEffect(() => {
     const fetchProfile = async () => {
-      try {
-        const res = await fetch(
-          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/user/view`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          }
-        )
-
-        const data = await res.json()
-
-        if (!res.ok) throw new Error(data?.message)
-        console.log('🚀data---->', data)
-
-        setProfile(data)
-      } catch (error) {
-        console.log('🚀error---->', error)
-      }
+      const res = await accountService.getProfile(clientAccessToken.value)
+      console.log('🚀res---->', res)
     }
 
     fetchProfile()
-  }, [token])
+  }, [accessToken])
 
   return <div>MeClientPage</div>
 }

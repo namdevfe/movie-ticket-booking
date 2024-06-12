@@ -4,6 +4,7 @@ import Button from '@/components/button'
 import Input from '@/components/input'
 import envConfig from '@/config/environment'
 import { message, regex, regexMessage } from '@/constants/validate'
+import authService from '@/services/auth-service'
 import { RegisterBodyType } from '@/types/auth'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
@@ -20,31 +21,10 @@ const RegisterForm = () => {
     const payload = { ...data }
 
     try {
-      const res = await fetch(
-        `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/register`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }
-      )
-
-      const registerRes: { message: string; statusCode: number } =
-        await res.json()
-
-      if (!res.ok)
-        throw new Error(
-          registerRes.message || 'Registration failed. Please try again.'
-        )
-
-      // Notification
-      toast.success(
-        registerRes.message || 'Register is successfully. Please login.'
-      )
+      const res = await authService.register(payload)
+      toast.success(res.message || 'Register is successfully. Please login.')
     } catch (error: any) {
-      toast.error(error.message)
+      toast.error(error?.data?.message)
     }
   }
 

@@ -2,11 +2,10 @@
 
 import Button from '@/components/button'
 import Input from '@/components/input'
-import envConfig from '@/config/environment'
 import { message, regex, regexMessage } from '@/constants/validate'
-import { useAppContext } from '@/context/app-provider'
-import { LoginBodyType, LoginResType } from '@/types/auth'
-import { useEffect } from 'react'
+import authService from '@/services/auth-service'
+import { LoginBodyType } from '@/types/auth'
+import { clientAccessToken } from '@/utils/http'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
@@ -18,52 +17,26 @@ const LoginForm = () => {
     formState: { errors }
   } = useForm<LoginBodyType>()
 
-  const { setToken } = useAppContext()
-
   // Handle Login
   const onSubmit = async (data: LoginBodyType) => {
     try {
       const payload = { ...data }
 
-      // Call API login
-      const res = await fetch(
-        `${envConfig.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(payload)
-        }
-      )
-
-      const loginRes: LoginResType = await res.json()
-
-      // Login fail
-      if (!res.ok)
-        throw new Error(loginRes.message || 'Login failed. Please try again.')
+      // Call API Login
+      const res = await authService.login(payload)
 
       // Save token to Context API
-      const accessToken = loginRes?.data?.accessToken || ''
+      const accessToken = res?.data?.accessToken || ''
+      clientAccessToken.value = accessToken
 
-      setToken(accessToken)
-
-      const resFromNextServer = await fetch('/api/auth', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(loginRes)
-      })
-
-      const dataFromNextServer = await resFromNextServer.json()
-      console.log('🚀dataFromNextServer---->', dataFromNextServer)
+      // Set access token on Next Server
+      await authService.authFromNextServer(accessToken)
 
       // Notification
-      toast.success(loginRes.message || 'Login is successfully.')
+      toast.success(res.message || 'Login is successfully.')
     } catch (error: any) {
-      console.log('🚀error.message---->', error.message)
-      toast.error(error.message || 'Login failed. Please try again.')
+      const errorMessage = error?.data?.message
+      toast.error(errorMessage || 'Login failed. Please try again.')
     }
   }
 
