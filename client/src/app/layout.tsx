@@ -5,6 +5,7 @@ import './globals.scss'
 import 'react-toastify/dist/ReactToastify.css'
 import AppProvider from '@/context/app-provider'
 import { cookies } from 'next/headers'
+import AuthProvider from '@/context/auth-provider'
 
 const roboto = Roboto({
   subsets: ['vietnamese', 'latin'],

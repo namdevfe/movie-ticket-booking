@@ -3,9 +3,8 @@ import { cookies } from 'next/headers'
 
 const MeProfilePage = async () => {
   const cookieStore = cookies()
-  const accessToken = cookieStore.get('token')?.value
-
-  const profile = await accountService.getProfile(accessToken ?? '')
+  const accessToken = cookieStore.get('token')
+  const profile = await accountService.getProfile(accessToken?.value)
 
   console.log('🚀profile---->', profile)
 

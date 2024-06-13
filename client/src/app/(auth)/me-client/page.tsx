@@ -10,7 +10,7 @@ const MeClientPage = () => {
 
   useEffect(() => {
     const fetchProfile = async () => {
-      const res = await accountService.getProfile(clientAccessToken.value)
+      const res = await accountService.getProfileClient()
       console.log('🚀res---->', res)
     }
 

@@ -43,7 +43,10 @@ const request = async <Response>(
       : options.baseUrl
   const body = options?.body ? JSON.stringify(options.body) : undefined
   const baseHeaders = {
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
+    Authorization: clientAccessToken.value
+      ? `Bearer ${clientAccessToken.value}`
+      : ''
   }
 
   // Fetching data

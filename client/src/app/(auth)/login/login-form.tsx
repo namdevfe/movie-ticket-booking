@@ -3,6 +3,7 @@
 import Button from '@/components/button'
 import Input from '@/components/input'
 import { message, regex, regexMessage } from '@/constants/validate'
+import { useAuthContext } from '@/context/auth-provider'
 import authService from '@/services/auth-service'
 import { LoginBodyType } from '@/types/auth'
 import { clientAccessToken } from '@/utils/http'
@@ -11,6 +12,7 @@ import { toast } from 'react-toastify'
 
 const LoginForm = () => {
   // Init hooks
+  // const { handleGetProfile } = useAuthContext()
   const {
     register,
     handleSubmit,
@@ -31,6 +33,8 @@ const LoginForm = () => {
 
       // Set access token on Next Server
       await authService.authFromNextServer(accessToken)
+
+      // Get profile
 
       // Notification
       toast.success(res.message || 'Login is successfully.')
