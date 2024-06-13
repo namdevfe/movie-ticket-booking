@@ -30,7 +30,9 @@ export default function RootLayout({
     <html lang='en'>
       <body className={roboto.className} suppressHydrationWarning>
         <ToastContainer position='bottom-right' theme='colored' />
-        <AppProvider initialToken={token}>{children}</AppProvider>
+        <AppProvider initialToken={token}>
+          <AuthProvider>{children}</AuthProvider>
+        </AppProvider>
       </body>
     </html>
   )

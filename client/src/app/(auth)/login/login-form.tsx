@@ -11,8 +11,7 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 const LoginForm = () => {
-  // Init hooks
-  // const { handleGetProfile } = useAuthContext()
+  const { handleGetProfile, profile } = useAuthContext()
   const {
     register,
     handleSubmit,
@@ -35,6 +34,7 @@ const LoginForm = () => {
       await authService.authFromNextServer(accessToken)
 
       // Get profile
+      handleGetProfile()
 
       // Notification
       toast.success(res.message || 'Login is successfully.')

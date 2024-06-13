@@ -1,4 +1,6 @@
 import envConfig from '@/config/environment'
+import { UNAUTHORIZE_ERROR_STATUS } from '@/constants/statusCode'
+import { redirect } from 'next/navigation'
 
 class HttpError extends Error {
   status: number
@@ -67,6 +69,45 @@ const request = async <Response>(
 
   // Failed
   if (!res.ok) {
+    // Handle interceptor token expired error
+    if (res.status === UNAUTHORIZE_ERROR_STATUS) {
+      // Auto logout from client
+      if (typeof window !== 'undefined') {
+        try {
+          const logoutFromNextClientToNextServerRes = await fetch(
+            '/api/auth/logout',
+            {
+              headers: {
+                ...baseHeaders
+              }
+            }
+          )
+
+          const data = await logoutFromNextClientToNextServerRes.json()
+
+          if (!logoutFromNextClientToNextServerRes.ok) {
+            throw new HttpError({
+              status: logoutFromNextClientToNextServerRes.status,
+              data
+            })
+          }
+
+          clientAccessToken.value = ''
+          location.href = '/login'
+        } catch (error: any) {
+          throw new HttpError({ status: error.status, data: error.message })
+        }
+      } else {
+        // Auto logout from server
+        const accessToken = (options?.headers as any)?.Authorization?.split(
+          ' '
+        )?.[1]
+
+        // Redirect to logout page to clear cookie
+        redirect(`/logout?token=${accessToken}`)
+      }
+    }
+
     throw new HttpError({ status, data })
   }
 

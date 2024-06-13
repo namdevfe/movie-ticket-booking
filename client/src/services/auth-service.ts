@@ -21,6 +21,11 @@ const authService = {
         baseUrl: ''
       }
     )
+  },
+  logoutFromNextClientToNextServer() {
+    return http.get('/api/auth/logout', {
+      baseUrl: ''
+    })
   }
 }
 

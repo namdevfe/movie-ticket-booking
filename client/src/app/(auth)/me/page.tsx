@@ -6,8 +6,6 @@ const MeProfilePage = async () => {
   const accessToken = cookieStore.get('token')
   const profile = await accountService.getProfile(accessToken?.value)
 
-  console.log('🚀profile---->', profile)
-
   return <div>MeProfilePage</div>
 }
 

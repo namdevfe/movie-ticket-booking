@@ -1,3 +1,5 @@
+import { GroupTypes } from '@/types/user'
+
 export type RegisterBodyType = {
   email: string
   username: string
@@ -21,4 +23,20 @@ export type LoginResType = {
 export type RegisterResType = {
   statusCode: number
   message: string
+}
+
+export type PayloadJWTTypes = {
+  userId: number
+  email: string
+  group: GroupTypes & {
+    roles: RolesTypes[]
+  }
+  iat: number
+  exp: number
+}
+
+export type RolesTypes = {
+  id: number
+  url: string
+  description: string
 }
