@@ -13,14 +13,10 @@ const authService = {
   register(payload: RegisterBodyType) {
     return http.post<RegisterResType>('/auth/register', payload)
   },
-  authFromNextServer(accessToken: string) {
-    return http.post(
-      '/api/auth',
-      { accessToken },
-      {
-        baseUrl: ''
-      }
-    )
+  authFromNextServer(payload: { accessToken: string; refreshToken: string }) {
+    return http.post('/api/auth', payload, {
+      baseUrl: ''
+    })
   },
   logoutFromNextClientToNextServer() {
     return http.get('/api/auth/logout', {

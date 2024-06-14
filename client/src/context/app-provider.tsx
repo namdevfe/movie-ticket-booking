@@ -1,7 +1,7 @@
 'use client'
 
-import { clientAccessToken } from '@/utils/http'
-import { ReactNode, useContext, useState } from 'react'
+import { clientToken } from '@/utils/http'
+import { ReactNode, useState } from 'react'
 
 type AppProviderProps = {
   children: ReactNode
@@ -11,7 +11,7 @@ type AppProviderProps = {
 const AppProvider = ({ children, initialToken }: AppProviderProps) => {
   useState(() => {
     if (typeof window !== 'undefined') {
-      clientAccessToken.value = initialToken ?? ''
+      clientToken.value = initialToken ?? ''
     }
   })
   return <>{children}</>

@@ -1,12 +1,13 @@
 'use client'
 
 import accountService from '@/services/account-service'
-import { clientAccessToken } from '@/utils/http'
+import { clientAccessToken, clientToken } from '@/utils/http'
 import { useEffect } from 'react'
 
 const MeClientPage = () => {
   const accessToken = clientAccessToken.value
-  console.log('🚀accessToken---->', accessToken)
+  const token = clientToken.value
+  console.log('🚀token---->', token)
 
   useEffect(() => {
     const fetchProfile = async () => {

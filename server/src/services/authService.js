@@ -1,6 +1,7 @@
 /* eslint-disable no-useless-catch */
 import bcrypt from 'bcrypt'
 import { StatusCodes } from 'http-status-codes'
+import { env } from '~/config/environment'
 import db from '~/models'
 import ApiError from '~/utils/ApiError'
 import { generateToken } from '~/utils/jwt'
@@ -100,19 +101,40 @@ const login = async ({ email, password }) => {
       ]
     })
 
-    // STEP 3: Generate accessToken if password passed
+    // STEP 3: Generate accessToken & refreshToken if password passed
     const accessToken = generateToken(
       {
         userId: user.id,
         email: user.email,
         group
       },
-      '5d'
+      env.JWT_SECRET_ACCESS_TOKEN_KEY,
+      '5s'
     )
+
+    const refreshToken = generateToken(
+      {
+        userId: user.id
+      },
+      env.JWT_SECRET_REFRESH_TOKEN_KEY,
+      '30d'
+    )
+
+    // Update refreshToken field in db
+    if (refreshToken) {
+      await db.User.update(
+        {
+          refreshToken
+        },
+        {
+          where: { id: user.id }
+        }
+      )
+    }
 
     return {
       accessToken: accessToken,
-      refreshToken: 'refreshToken'
+      refreshToken: refreshToken
     }
   } catch (error) {
     throw error

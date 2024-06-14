@@ -40,3 +40,8 @@ export type RolesTypes = {
   url: string
   description: string
 }
+
+export type TokenTypes = {
+  accessToken: string
+  refreshToken: string
+}

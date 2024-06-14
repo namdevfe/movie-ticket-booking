@@ -13,11 +13,11 @@ const verifyToken = (req, res, next) => {
     if (!token)
       throw new ApiError(StatusCodes.UNAUTHORIZED, 'Token is required.')
     const accessToken = token.split(' ')[1]
-    jwt.verify(accessToken, env.JWT_SECRET_KEY, (err, decode) => {
+    jwt.verify(accessToken, env.JWT_SECRET_ACCESS_TOKEN_KEY, (err, decode) => {
       if (err) {
         const isTokenExpired = err instanceof TokenExpiredError
         if (isTokenExpired) {
-          throw new ApiError(StatusCodes.FORBIDDEN, 'Token is expired.')
+          throw new ApiError(StatusCodes.UNAUTHORIZED, 'Token is expired.')
         } else {
           throw new ApiError(StatusCodes.UNAUTHORIZED, 'Token invalid')
         }

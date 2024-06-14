@@ -25,6 +25,7 @@ module.exports = (sequelize, DataTypes) => {
       phone: DataTypes.STRING,
       address: DataTypes.TEXT,
       bookings: DataTypes.TEXT,
+      refreshToken: DataTypes.STRING,
       groupId: DataTypes.INTEGER
     },
     {

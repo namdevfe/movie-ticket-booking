@@ -1,10 +1,9 @@
 import jwt from 'jsonwebtoken'
-import { env } from '~/config/environment'
 
-export const generateToken = (data, expireTime) => {
-  const accessToken = jwt.sign(data, env.JWT_SECRET_KEY, {
+export const generateToken = (data, secretKey, expireTime) => {
+  const token = jwt.sign(data, secretKey, {
     expiresIn: expireTime
   })
 
-  return accessToken
+  return token
 }

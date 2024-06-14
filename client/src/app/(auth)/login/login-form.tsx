@@ -6,12 +6,14 @@ import { message, regex, regexMessage } from '@/constants/validate'
 import { useAuthContext } from '@/context/auth-provider'
 import authService from '@/services/auth-service'
 import { LoginBodyType } from '@/types/auth'
-import { clientAccessToken } from '@/utils/http'
+import { clientToken } from '@/utils/http'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 const LoginForm = () => {
   const { handleGetProfile, profile } = useAuthContext()
+  const router = useRouter()
   const {
     register,
     handleSubmit,
@@ -27,19 +29,23 @@ const LoginForm = () => {
       const res = await authService.login(payload)
 
       // Save token to Context API
-      const accessToken = res?.data?.accessToken || ''
-      clientAccessToken.value = accessToken
+      const token = res?.data || {}
+
+      clientToken.value = JSON.stringify(token)
 
       // Set access token on Next Server
-      await authService.authFromNextServer(accessToken)
+      await authService.authFromNextServer(token)
 
       // Get profile
-      handleGetProfile()
+      // handleGetProfile()
 
       // Notification
       toast.success(res.message || 'Login is successfully.')
+
+      router.push('/me')
     } catch (error: any) {
       const errorMessage = error?.data?.message
+      console.log('🚀error---->', error)
       toast.error(errorMessage || 'Login failed. Please try again.')
     }
   }

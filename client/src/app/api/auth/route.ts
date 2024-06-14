@@ -1,23 +1,17 @@
-import { PayloadJWTTypes } from '@/types/auth'
-import { decode } from '@/utils/jwt'
-
 export const POST = async (req: Request) => {
   // Get access token from request of next client
-  const res = await req.json()
-  const accessToken = res?.accessToken as string
+  const token = await req.json()
 
   // Check token
-  if (!accessToken)
+  if (!token)
     return Response.json({ message: 'Token is required.' }, { status: 400 })
 
-  // Decode
-  const payloadJWT = decode<PayloadJWTTypes>(accessToken)
-  const expiresDate = new Date(payloadJWT.exp * 1000).toUTCString()
-
-  return Response.json(res, {
+  return Response.json(token, {
     status: 200,
     headers: {
-      'Set-Cookie': `token=${accessToken}; Path=/; HttpOnly; Expires=${expiresDate}; SameSite=Lax; Secure`
+      'Set-Cookie': `token=${JSON.stringify(
+        token
+      )}; Path=/; HttpOnly; SameSite=Lax; Secure`
     }
   })
 }

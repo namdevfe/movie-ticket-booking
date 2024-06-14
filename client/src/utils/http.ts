@@ -1,5 +1,9 @@
 import envConfig from '@/config/environment'
-import { UNAUTHORIZE_ERROR_STATUS } from '@/constants/statusCode'
+import {
+  FORBIDDEN_ERROR_STATUS,
+  UNAUTHORIZE_ERROR_STATUS
+} from '@/constants/statusCode'
+import { TokenTypes } from '@/types/auth'
 import { redirect } from 'next/navigation'
 
 class HttpError extends Error {
@@ -12,22 +16,23 @@ class HttpError extends Error {
   }
 }
 
-class AccessToken {
-  private accessToken = ''
+class Token {
+  private token = ''
 
   get value() {
-    return this.accessToken
+    return this.token
   }
 
-  set value(accessToken: string) {
+  set value(token: string) {
     if (typeof window === 'undefined') {
       throw new Error('Cannot set access token on server side.')
     }
-    this.accessToken = accessToken
+    this.token = token
   }
 }
 
-export const clientAccessToken = new AccessToken()
+export const clientAccessToken = new Token()
+export const clientToken = new Token()
 
 type CustomOptionsType = RequestInit & {
   baseUrl?: string
@@ -44,11 +49,12 @@ const request = async <Response>(
       ? envConfig.NEXT_PUBLIC_API_ENDPOINT
       : options.baseUrl
   const body = options?.body ? JSON.stringify(options.body) : undefined
+  const token: TokenTypes = clientToken.value && JSON.parse(clientToken.value)
+  const { accessToken } = token
+
   const baseHeaders = {
     'Content-Type': 'application/json',
-    Authorization: clientAccessToken.value
-      ? `Bearer ${clientAccessToken.value}`
-      : ''
+    Authorization: accessToken ? `Bearer ${accessToken}` : ''
   }
 
   // Fetching data
@@ -70,7 +76,10 @@ const request = async <Response>(
   // Failed
   if (!res.ok) {
     // Handle interceptor token expired error
-    if (res.status === UNAUTHORIZE_ERROR_STATUS) {
+    if (
+      res.status === UNAUTHORIZE_ERROR_STATUS ||
+      res.status === FORBIDDEN_ERROR_STATUS
+    ) {
       // Auto logout from client
       if (typeof window !== 'undefined') {
         try {
@@ -92,7 +101,7 @@ const request = async <Response>(
             })
           }
 
-          clientAccessToken.value = ''
+          clientToken.value = ''
           location.href = '/login'
         } catch (error: any) {
           throw new HttpError({ status: error.status, data: error.message })
@@ -104,7 +113,7 @@ const request = async <Response>(
         )?.[1]
 
         // Redirect to logout page to clear cookie
-        redirect(`/logout?token=${accessToken}`)
+        redirect(`/logout?accessToken=${accessToken}`)
       }
     }
 

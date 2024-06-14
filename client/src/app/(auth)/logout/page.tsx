@@ -1,16 +1,17 @@
 'use client'
 
 import authService from '@/services/auth-service'
-import { clientAccessToken } from '@/utils/http'
+import { clientAccessToken, clientToken } from '@/utils/http'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'
 
 const LogoutPage = () => {
   const searchParams = useSearchParams()
-  const accessToken = searchParams.get('token')
+  const accessToken = searchParams.get('accessToken')
   const router = useRouter()
   const pathname = usePathname()
+
   useEffect(() => {
     const handleLogout = async () => {
       try {
@@ -22,7 +23,8 @@ const LogoutPage = () => {
       }
     }
 
-    if (accessToken === clientAccessToken.value) {
+    const token = clientToken.value && JSON.parse(clientToken.value)
+    if (accessToken === token?.accessToken) {
       handleLogout()
     }
   }, [accessToken, router, pathname])

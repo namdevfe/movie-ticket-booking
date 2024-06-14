@@ -34,6 +34,9 @@ module.exports = {
       bookings: {
         type: Sequelize.TEXT
       },
+      refreshToken: {
+        type: Sequelize.STRING
+      },
       groupId: {
         type: Sequelize.INTEGER,
         allowNull: false,

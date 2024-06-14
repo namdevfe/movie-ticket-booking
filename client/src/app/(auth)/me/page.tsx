@@ -3,8 +3,14 @@ import { cookies } from 'next/headers'
 
 const MeProfilePage = async () => {
   const cookieStore = cookies()
-  const accessToken = cookieStore.get('token')
-  const profile = await accountService.getProfile(accessToken?.value)
+  const token = cookieStore.get('token')?.value
+  const { accessToken, refreshToken } = JSON.parse(
+    token !== undefined ? token : ''
+  )
+
+  const profile = await accountService.getProfile(accessToken)
+
+  console.log('🚀profile---->', profile)
 
   return <div>MeProfilePage</div>
 }
