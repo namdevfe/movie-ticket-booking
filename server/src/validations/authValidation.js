@@ -56,9 +56,26 @@ const login = async (req, res, next) => {
   }
 }
 
+const refreshToken = async (req, res, next) => {
+  const scheme = Joi.object({
+    refreshToken: Joi.string().required().trim().strict()
+  })
+  try {
+    await scheme.validateAsync(req.body, { abortEarly: false })
+    next()
+  } catch (error) {
+    const customError = new ApiError(
+      StatusCodes.UNPROCESSABLE_ENTITY,
+      new Error(error).message
+    )
+    next(customError)
+  }
+}
+
 const authValidation = {
   register,
-  login
+  login,
+  refreshToken
 }
 
 export default authValidation

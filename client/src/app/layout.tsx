@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import AppProvider from '@/context/app-provider'
 import { cookies } from 'next/headers'
 import AuthProvider from '@/context/auth-provider'
+import RefreshToken from '@/components/refresh-token'
 
 const roboto = Roboto({
   subsets: ['vietnamese', 'latin'],
@@ -33,6 +34,7 @@ export default function RootLayout({
         <AppProvider initialToken={token}>
           <AuthProvider>{children}</AuthProvider>
         </AppProvider>
+        <RefreshToken />
       </body>
     </html>
   )

@@ -5,6 +5,11 @@ import { env } from '~/config/environment'
 import db from '~/models'
 import ApiError from '~/utils/ApiError'
 import { generateToken } from '~/utils/jwt'
+import jwt from 'jsonwebtoken'
+import {
+  ACCESS_TOKEN_EXPIRES_TIME,
+  REFRESH_TOKEN_EXPIRES_TIME
+} from '~/utils/constants'
 
 const SALT_ROUNDS = 10
 
@@ -109,7 +114,7 @@ const login = async ({ email, password }) => {
         group
       },
       env.JWT_SECRET_ACCESS_TOKEN_KEY,
-      '5s'
+      ACCESS_TOKEN_EXPIRES_TIME
     )
 
     const refreshToken = generateToken(
@@ -117,7 +122,7 @@ const login = async ({ email, password }) => {
         userId: user.id
       },
       env.JWT_SECRET_REFRESH_TOKEN_KEY,
-      '30d'
+      REFRESH_TOKEN_EXPIRES_TIME
     )
 
     // Update refreshToken field in db
@@ -141,9 +146,67 @@ const login = async ({ email, password }) => {
   }
 }
 
+const refreshToken = async (refreshToken) => {
+  try {
+    const user = await db.User.findOne({
+      where: {
+        refreshToken
+      }
+    })
+
+    // Refresh token valid
+    if (!user) {
+      throw new ApiError(StatusCodes.BAD_REQUEST, 'Refresh token invalid')
+    }
+
+    const group = await db.Group.findOne({
+      where: {
+        id: user.groupId
+      },
+      include: [
+        {
+          model: db.Role,
+          attributes: ['id', 'url', 'description'],
+          as: 'roles',
+          through: { attributes: [] }
+        }
+      ]
+    })
+
+    // Verify refresh token
+    const token = {}
+    jwt.verify(refreshToken, env.JWT_SECRET_REFRESH_TOKEN_KEY, (err) => {
+      if (err) {
+        throw new ApiError(
+          StatusCodes.UNAUTHORIZED,
+          'Refresh token has expired. Please login.'
+        )
+      } else {
+        // Generate new access token
+        const newAccessToken = generateToken(
+          {
+            userId: user.id,
+            email: user.email,
+            group
+          },
+          env.JWT_SECRET_ACCESS_TOKEN_KEY,
+          '5d'
+        )
+
+        token.accessToken = newAccessToken
+        token.refreshToken = refreshToken
+      }
+    })
+    return token
+  } catch (error) {
+    throw error
+  }
+}
+
 const authService = {
   register,
-  login
+  login,
+  refreshToken
 }
 
 export default authService

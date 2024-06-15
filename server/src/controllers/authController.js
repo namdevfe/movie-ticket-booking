@@ -26,9 +26,26 @@ const login = async (req, res, next) => {
   }
 }
 
+const refreshToken = async (req, res, next) => {
+  const { refreshToken } = req.body
+
+  try {
+    const response = await authService.refreshToken(refreshToken)
+
+    return res.status(StatusCodes.OK).json({
+      statusCode: StatusCodes.OK,
+      message: 'OK',
+      data: response
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const authController = {
   register,
-  login
+  login,
+  refreshToken
 }
 
 export default authController

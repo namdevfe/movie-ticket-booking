@@ -1,8 +1,10 @@
 import {
   LoginBodyType,
   LoginResType,
+  RefreshTokenResTypes,
   RegisterBodyType,
-  RegisterResType
+  RegisterResType,
+  TokenTypes
 } from '@/types/auth'
 import http from '@/utils/http'
 
@@ -13,7 +15,7 @@ const authService = {
   register(payload: RegisterBodyType) {
     return http.post<RegisterResType>('/auth/register', payload)
   },
-  authFromNextServer(payload: { accessToken: string; refreshToken: string }) {
+  authFromNextServer(payload: TokenTypes) {
     return http.post('/api/auth', payload, {
       baseUrl: ''
     })
@@ -22,6 +24,9 @@ const authService = {
     return http.get('/api/auth/logout', {
       baseUrl: ''
     })
+  },
+  refreshToken(payload: { refreshToken: string }) {
+    return http.post<RefreshTokenResTypes>('/auth/refresh-token', payload)
   }
 }
 

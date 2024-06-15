@@ -3,7 +3,6 @@
 import Button from '@/components/button'
 import Input from '@/components/input'
 import { message, regex, regexMessage } from '@/constants/validate'
-import { useAuthContext } from '@/context/auth-provider'
 import authService from '@/services/auth-service'
 import { LoginBodyType } from '@/types/auth'
 import { clientToken } from '@/utils/http'
@@ -12,7 +11,6 @@ import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 
 const LoginForm = () => {
-  const { handleGetProfile, profile } = useAuthContext()
   const router = useRouter()
   const {
     register,
@@ -28,9 +26,8 @@ const LoginForm = () => {
       // Call API Login
       const res = await authService.login(payload)
 
-      // Save token to Context API
+      // Save token to client
       const token = res?.data || {}
-
       clientToken.value = JSON.stringify(token)
 
       // Set access token on Next Server
@@ -45,7 +42,6 @@ const LoginForm = () => {
       router.push('/me')
     } catch (error: any) {
       const errorMessage = error?.data?.message
-      console.log('🚀error---->', error)
       toast.error(errorMessage || 'Login failed. Please try again.')
     }
   }

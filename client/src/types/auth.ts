@@ -27,8 +27,8 @@ export type RegisterResType = {
 
 export type PayloadJWTTypes = {
   userId: number
-  email: string
-  group: GroupTypes & {
+  email?: string
+  group?: GroupTypes & {
     roles: RolesTypes[]
   }
   iat: number
@@ -44,4 +44,10 @@ export type RolesTypes = {
 export type TokenTypes = {
   accessToken: string
   refreshToken: string
+}
+
+export type RefreshTokenResTypes = {
+  statusCode: number
+  message: string
+  data: TokenTypes
 }

@@ -10,8 +10,6 @@ const MeProfilePage = async () => {
 
   const profile = await accountService.getProfile(accessToken)
 
-  console.log('🚀profile---->', profile)
-
   return <div>MeProfilePage</div>
 }
 

@@ -31,7 +31,6 @@ class Token {
   }
 }
 
-export const clientAccessToken = new Token()
 export const clientToken = new Token()
 
 type CustomOptionsType = RequestInit & {
@@ -76,10 +75,7 @@ const request = async <Response>(
   // Failed
   if (!res.ok) {
     // Handle interceptor token expired error
-    if (
-      res.status === UNAUTHORIZE_ERROR_STATUS ||
-      res.status === FORBIDDEN_ERROR_STATUS
-    ) {
+    if (res.status === UNAUTHORIZE_ERROR_STATUS) {
       // Auto logout from client
       if (typeof window !== 'undefined') {
         try {
