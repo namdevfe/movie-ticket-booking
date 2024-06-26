@@ -1,24 +1,26 @@
-import { groupRoles } from '@/constants/roles'
-import { PayloadJWTTypes } from '@/types/auth'
-import { decode } from '@/utils/jwt'
-import { cookies } from 'next/headers'
-import { redirect } from 'next/navigation'
+// import { groupRoles } from '@/constants/roles'
+// import { PayloadJWTTypes } from '@/types/auth'
+// import { decode } from '@/utils/jwt'
+// import { cookies } from 'next/headers'
+// import { redirect } from 'next/navigation'
+import Header from '@/components/header'
+import Sidebar from '@/components/sidebar'
 import React from 'react'
 
-type Props = {}
+type Props = {
+  children: React.ReactNode
+}
 
-const AdminLayout = (props: Props) => {
-  // const cookieStore = cookies()
-  // const token = cookieStore.get('token')?.value
-  // const { accessToken } = JSON.parse(token || '')
-  // const payloadJWT = decode<PayloadJWTTypes>(accessToken)
-  // const role = payloadJWT.group?.name
-  // const isAdmin = role === groupRoles.ADMIN
-
-  // if (!isAdmin) {
-  //   redirect('/')
-  // }
-  return <div>AdminLayout</div>
+const AdminLayout = ({ children }: Props) => {
+  return (
+    <>
+      <Header type='admin' />
+      <Sidebar />
+      <main className='w-[calc(100%-300px)] ml-[300px] h-[500px] pt-16 px-4'>
+        {children}
+      </main>
+    </>
+  )
 }
 
 export default AdminLayout

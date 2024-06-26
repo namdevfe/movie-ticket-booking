@@ -14,8 +14,22 @@ const getProfile = async (req, res, next) => {
   }
 }
 
+const getUsers = async (req, res, next) => {
+  try {
+    const users = await userService.getUsers(req.query)
+    return res.status(StatusCodes.OK).json({
+      statusCode: StatusCodes.OK,
+      message: StatusCodes[StatusCodes.OK],
+      data: users
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const userController = {
-  getProfile
+  getProfile,
+  getUsers
 }
 
 export default userController

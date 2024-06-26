@@ -10,3 +10,5 @@ export const WHITELIST_DOMAINS = ['http://localhost:3000']
 
 export const ACCESS_TOKEN_EXPIRES_TIME = '5d'
 export const REFRESH_TOKEN_EXPIRES_TIME = '30d'
+
+export const LIMIT_USERS = 1

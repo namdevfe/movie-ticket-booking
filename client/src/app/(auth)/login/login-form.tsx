@@ -39,7 +39,7 @@ const LoginForm = () => {
       // Notification
       toast.success(res.message || 'Login is successfully.')
 
-      router.push('/me')
+      router.push('/')
     } catch (error: any) {
       const errorMessage = error?.data?.message
       toast.error(errorMessage || 'Login failed. Please try again.')

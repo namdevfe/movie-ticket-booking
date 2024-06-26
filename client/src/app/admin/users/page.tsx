@@ -1,0 +1,43 @@
+import UserTable from '@/app/admin/users/user-table'
+import Button from '@/components/button'
+import Pagination from '@/components/pagination'
+import { LIMIT_USERS } from '@/constants/pagination'
+import accountService from '@/services/account-service'
+import { cookies } from 'next/headers'
+
+type Props = {
+  searchParams: { [key: string]: string | string[] | undefined }
+}
+
+const ManageUserPage = async ({ searchParams }: Props) => {
+  const cookieStore = cookies()
+  const token = cookieStore.get('token')
+  const accessToken = token?.value && JSON.parse(token.value).accessToken
+
+  const currentPage = Number(searchParams.page) || 1
+  const limit = Number(searchParams.limit) || LIMIT_USERS
+  const res: any = await accountService.getUsers(
+    accessToken,
+    `?page=${currentPage}&limit=${limit}`
+  )
+  const users = res?.data?.users
+  const total = res?.data?.count
+
+  return (
+    <>
+      <div className='flex items-center justify-between pt-10'>
+        <h2>Users</h2>
+        <Button>Add new user</Button>
+      </div>
+      <UserTable users={users} />
+      <Pagination
+        total={total}
+        page={currentPage}
+        containerStyles='justify-end mt-5'
+        limit={limit}
+      />
+    </>
+  )
+}
+
+export default ManageUserPage

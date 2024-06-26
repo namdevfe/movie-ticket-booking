@@ -1,11 +1,13 @@
-import db from '~/models'
-
 /* eslint-disable no-useless-catch */
+import db from '~/models'
+import { LIMIT_USERS } from '~/utils/constants'
+
+// Get profile
 const getProfile = async ({ userId }) => {
   try {
     const userInfo = await db.User.findByPk(userId, {
       attributes: {
-        exclude: ['password']
+        exclude: ['password', 'refreshToken']
       },
       include: [
         {
@@ -26,8 +28,39 @@ const getProfile = async ({ userId }) => {
   }
 }
 
+// Get all users
+const getUsers = async (query) => {
+  const queries = {
+    attributes: {
+      exclude: ['password', 'refreshToken']
+    }
+  }
+
+  // Paging
+  const { page, limit } = query || {}
+
+  queries.offset = !page || Number(page) <= 1 ? 0 : (Number(page) - 1) * limit
+  queries.limit = Number(limit) || LIMIT_USERS
+
+  try {
+    const { count, rows } = await db.User.findAndCountAll({
+      ...queries,
+      raw: true,
+      nest: true
+    })
+
+    return {
+      count,
+      users: [...rows]
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const userService = {
-  getProfile
+  getProfile,
+  getUsers
 }
 
 export default userService

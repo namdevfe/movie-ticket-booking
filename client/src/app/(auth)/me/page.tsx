@@ -8,7 +8,10 @@ const MeProfilePage = async () => {
     token !== undefined ? token : ''
   )
 
-  const profile = await accountService.getProfile(accessToken)
+  if (accessToken) {
+    const profile = await accountService.getProfile(accessToken)
+    console.log('🚀profile---->', profile)
+  }
 
   return <div>MeProfilePage</div>
 }

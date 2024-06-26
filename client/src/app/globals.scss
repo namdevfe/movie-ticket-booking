@@ -32,3 +32,9 @@
     @apply text-shade-900;
   }
 }
+
+@layer utilities {
+  .wrapper {
+    @apply max-w-[1920px] ml-auto mr-auto;
+  }
+}

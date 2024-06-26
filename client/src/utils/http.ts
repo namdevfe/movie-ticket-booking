@@ -75,6 +75,7 @@ const request = async <Response>(
   // Failed
   if (!res.ok) {
     // Handle interceptor token expired error
+    // Unauthorize error
     if (res.status === UNAUTHORIZE_ERROR_STATUS) {
       // Auto logout from client
       if (typeof window !== 'undefined') {
@@ -98,7 +99,7 @@ const request = async <Response>(
           }
 
           clientToken.value = ''
-          location.href = '/login'
+          // location.href = '/login'
         } catch (error: any) {
           throw new HttpError({ status: error.status, data: error.message })
         }
@@ -110,6 +111,15 @@ const request = async <Response>(
 
         // Redirect to logout page to clear cookie
         redirect(`/logout?accessToken=${accessToken}`)
+      }
+    }
+
+    // Permission error
+    if (res.status === FORBIDDEN_ERROR_STATUS) {
+      if (typeof window !== 'undefined') {
+        location.href = '/permission-denied'
+      } else {
+        redirect('/permission-denied')
       }
     }
 
