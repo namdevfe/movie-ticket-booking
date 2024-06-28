@@ -1,3 +1,4 @@
+import { RegisterBodyType, RegisterResType } from '@/types/auth'
 import http from '@/utils/http'
 
 const accountService = {
@@ -17,6 +18,9 @@ const accountService = {
         Authorization: `Bearer ${accessToken}`
       }
     })
+  },
+  addNewUser(payload: RegisterBodyType) {
+    return http.post<RegisterResType>('/user/add', payload)
   }
 }
 

@@ -6,7 +6,7 @@ import type { NextRequest } from 'next/server'
 
 const userPrivatePaths = ['/me']
 const publicPaths = ['/login', '/register']
-const adminPaths = ['/admin/dashboard', '/admin/users']
+const adminPaths = ['/admin/dashboard', '/admin/users', '/admin/users/add']
 
 // This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
@@ -28,11 +28,10 @@ export function middleware(request: NextRequest) {
   const tokenObj: TokenTypes = token && JSON.parse(token)
   const payloadJWT = decode<PayloadJWTTypes>(tokenObj?.accessToken)
   const role = payloadJWT?.group?.name
-  // const isAdmin = role === groupRoles.ADMIN
   const isCustomer = role === groupRoles.CUSTOMER
 
   // Check role
-  if (isCustomer && adminPaths.includes(pathname)) {
+  if (isCustomer && adminPaths.some((path) => path === pathname)) {
     return NextResponse.redirect(new URL('/permission-denied', request.url))
   }
 
@@ -41,5 +40,12 @@ export function middleware(request: NextRequest) {
 
 // See "Matching Paths" below to learn more
 export const config = {
-  matcher: ['/me', '/login', '/register', '/admin/dashboard', '/admin/users']
+  matcher: [
+    '/me',
+    '/login',
+    '/register',
+    '/admin/dashboard',
+    '/admin/users',
+    '/admin/users/add'
+  ]
 }

@@ -27,9 +27,22 @@ const getUsers = async (req, res, next) => {
   }
 }
 
+const createUser = async (req, res, next) => {
+  try {
+    await userService.createUser(req.body)
+    return res.status(StatusCodes.CREATED).json({
+      statusCode: StatusCodes.CREATED,
+      message: 'Created new user is successfully'
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
 const userController = {
   getProfile,
-  getUsers
+  getUsers,
+  createUser
 }
 
 export default userController

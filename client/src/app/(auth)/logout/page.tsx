@@ -1,7 +1,7 @@
 'use client'
 
 import authService from '@/services/auth-service'
-import { clientAccessToken, clientToken } from '@/utils/http'
+import { clientToken } from '@/utils/http'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import { toast } from 'react-toastify'

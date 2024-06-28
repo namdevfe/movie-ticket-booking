@@ -16,7 +16,7 @@ const AdminLayout = ({ children }: Props) => {
     <>
       <Header type='admin' />
       <Sidebar />
-      <main className='w-[calc(100%-300px)] ml-[300px] h-[500px] pt-16 px-4'>
+      <main className='w-[calc(100%-300px)] ml-[300px] h-screen pt-16 px-4'>
         {children}
       </main>
     </>

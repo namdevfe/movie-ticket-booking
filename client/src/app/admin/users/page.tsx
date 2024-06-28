@@ -1,5 +1,5 @@
+import ButtonAddUser from '@/app/admin/users/button-add'
 import UserTable from '@/app/admin/users/user-table'
-import Button from '@/components/button'
 import Pagination from '@/components/pagination'
 import { LIMIT_USERS } from '@/constants/pagination'
 import accountService from '@/services/account-service'
@@ -27,7 +27,7 @@ const ManageUserPage = async ({ searchParams }: Props) => {
     <>
       <div className='flex items-center justify-between pt-10'>
         <h2>Users</h2>
-        <Button>Add new user</Button>
+        <ButtonAddUser />
       </div>
       <UserTable users={users} />
       <Pagination
