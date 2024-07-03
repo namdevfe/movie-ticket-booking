@@ -39,10 +39,26 @@ const createUser = async (req, res, next) => {
   }
 }
 
+const deleteUser = async (req, res, next) => {
+  const userId = req.body.userId
+  try {
+    const deletedUser = await userService.deleteUser(userId)
+    if (deletedUser) {
+      return res.status(StatusCodes.OK).json({
+        statusCode: StatusCodes.OK,
+        message: `Deleted userId = ${userId} is successfully`
+      })
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
 const userController = {
   getProfile,
   getUsers,
-  createUser
+  createUser,
+  deleteUser
 }
 
 export default userController

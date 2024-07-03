@@ -1,5 +1,4 @@
 import AddUserForm from '@/app/admin/users/add/add-form'
-import React from 'react'
 
 const AddUserPage = () => {
   return (

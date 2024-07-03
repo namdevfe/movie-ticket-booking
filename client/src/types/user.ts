@@ -1,6 +1,7 @@
+import { ResponseBaseTypes } from '@/types/base'
 import { BaseTypes } from '@/types/common'
 
-export type ProfileTypes = BaseTypes & {
+export type UserTypes = BaseTypes & {
   id: number
   address: string
   avatar: string
@@ -12,8 +13,16 @@ export type ProfileTypes = BaseTypes & {
   username: string
 }
 
+export type ProfileTypes = UserTypes
+
 export type GroupTypes = {
   id: number
   description: string
   name: string
 }
+
+export type DeleteUserTypes = {
+  userId: number
+}
+
+export type DeleteUserResTypes = ResponseBaseTypes

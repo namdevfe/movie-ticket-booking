@@ -1,3 +1,7 @@
+import Link from 'next/link'
+import { FaRegEdit } from 'react-icons/fa'
+import { AiOutlineDelete } from 'react-icons/ai'
+
 type Props = {
   users: any
 }
@@ -11,6 +15,7 @@ const UserTable = ({ users }: Props) => {
             <th className='px-3 py-2'>#</th>
             <th className='px-3 py-2'>Email</th>
             <th className='px-3 py-2'>Username</th>
+            <th className='px-3 py-2'>Role</th>
             <th className='px-3 py-2'>Created At</th>
             <th className='px-3 py-2'>Actions</th>
           </tr>
@@ -22,8 +27,20 @@ const UserTable = ({ users }: Props) => {
                 <td className='px-3'>{user.id}</td>
                 <td className='px-3'>{user.email}</td>
                 <td className='px-3'>{user.username}</td>
+                <td className='px-3'>{user.group?.name}</td>
                 <td className='px-3'>{user.createdAt}</td>
-                <td className='px-3'>Edit | Delete</td>
+                <td className='px-3 flex items-center gap-2'>
+                  <Link href='/admin/users/edit'>
+                    <span>
+                      <FaRegEdit className='text-sunshine-yellow' size={20} />
+                    </span>
+                  </Link>
+                  <Link href={`/admin/users/delete/${user.id}`}>
+                    <span>
+                      <AiOutlineDelete className='text-sweet-red' size={20} />
+                    </span>
+                  </Link>
+                </td>
               </tr>
             ))}
         </tbody>

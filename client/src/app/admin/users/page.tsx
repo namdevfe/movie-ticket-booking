@@ -3,6 +3,7 @@ import UserTable from '@/app/admin/users/user-table'
 import Pagination from '@/components/pagination'
 import { LIMIT_USERS } from '@/constants/pagination'
 import accountService from '@/services/account-service'
+import { UserTypes } from '@/types/user'
 import { cookies } from 'next/headers'
 
 type Props = {
@@ -20,7 +21,8 @@ const ManageUserPage = async ({ searchParams }: Props) => {
     accessToken,
     `?page=${currentPage}&limit=${limit}`
   )
-  const users = res?.data?.users
+
+  const users = res?.data.users as UserTypes
   const total = res?.data?.count
 
   return (

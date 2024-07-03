@@ -37,7 +37,15 @@ const getUsers = async (query) => {
   const queries = {
     attributes: {
       exclude: ['password', 'refreshToken']
-    }
+    },
+    include: [
+      {
+        model: db.Group,
+        as: 'group'
+      }
+    ],
+    raw: true,
+    nest: true
   }
 
   // Paging
@@ -109,10 +117,31 @@ const createUser = async (data) => {
   }
 }
 
+// Delete user
+const deleteUser = async (userId) => {
+  try {
+    const res = await db.User.destroy({
+      where: {
+        id: userId
+      }
+    })
+
+    if (res === 0)
+      throw new ApiError(
+        StatusCodes.UNPROCESSABLE_ENTITY,
+        'Delete user failed. Please try again.'
+      )
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
 const userService = {
   getProfile,
   getUsers,
-  createUser
+  createUser,
+  deleteUser
 }
 
 export default userService
