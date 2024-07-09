@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { FaRegEdit } from 'react-icons/fa'
 import { AiOutlineDelete } from 'react-icons/ai'
+import { formatDate } from '@/utils/format'
 
 type Props = {
   users: any
@@ -28,13 +29,16 @@ const UserTable = ({ users }: Props) => {
                 <td className='px-3'>{user.email}</td>
                 <td className='px-3'>{user.username}</td>
                 <td className='px-3'>{user.group?.name}</td>
-                <td className='px-3'>{user.createdAt}</td>
+                <td className='px-3'>{formatDate(user.createdAt)}</td>
                 <td className='px-3 flex items-center gap-2'>
+                  {/* Edit */}
                   <Link href='/admin/users/edit'>
                     <span>
                       <FaRegEdit className='text-sunshine-yellow' size={20} />
                     </span>
                   </Link>
+
+                  {/* Delete */}
                   <Link href={`/admin/users/delete/${user.id}`}>
                     <span>
                       <AiOutlineDelete className='text-sweet-red' size={20} />

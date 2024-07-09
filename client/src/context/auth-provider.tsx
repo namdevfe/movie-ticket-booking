@@ -1,9 +1,7 @@
 'use client'
 
 import accountService from '@/services/account-service'
-import { LoginBodyType } from '@/types/auth'
 import { ProfileTypes } from '@/types/user'
-import { clientAccessToken } from '@/utils/http'
 import { ReactNode, createContext, useContext, useState } from 'react'
 
 const AuthContext = createContext({

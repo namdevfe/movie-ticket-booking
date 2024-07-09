@@ -1,5 +1,6 @@
 'use client'
 
+import { addNewUserAction } from '@/actions/users'
 import Button from '@/components/button'
 import Input from '@/components/input'
 import { message, regex, regexMessage } from '@/constants/validate'
@@ -22,10 +23,10 @@ const AddUserForm = () => {
   const onSubmit = async (data: RegisterBodyType) => {
     const payload = { ...data }
 
-    // Call api
     try {
-      const res = await accountService.addNewUser(payload)
-      toast.success(res.message || 'Add new user is successfully.')
+      // Call add new user server action
+      const res = await addNewUserAction(payload)
+      toast.success(res?.message || 'Add new user is successfully.')
       router.push('/admin/users')
     } catch (error: any) {
       toast.error(

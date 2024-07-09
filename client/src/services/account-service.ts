@@ -17,14 +17,25 @@ const accountService = {
     return http.get<UserTypes>(`/user/view-all${query}`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
+      },
+      next: {
+        tags: ['list-users']
       }
     })
   },
-  addNewUser(payload: RegisterBodyType) {
-    return http.post<RegisterResType>('/user/add', payload)
+  addNewUser(payload: RegisterBodyType, accessToken: string) {
+    return http.post<RegisterResType>('/user/add', payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   },
-  deleteUser(payload: DeleteUserTypes) {
-    return http.delete<DeleteUserResTypes>('/user/delete', payload)
+  deleteUser(payload: DeleteUserTypes, accessToken: string) {
+    return http.delete<DeleteUserResTypes>('/user/delete', payload, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
   }
 }
 

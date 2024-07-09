@@ -33,9 +33,9 @@ const ManageUserPage = async ({ searchParams }: Props) => {
       </div>
       <UserTable users={users} />
       <Pagination
+        containerStyles='justify-end mt-5'
         total={total}
         page={currentPage}
-        containerStyles='justify-end mt-5'
         limit={limit}
       />
     </>

@@ -1,5 +1,6 @@
 'use client'
 
+import { deleteUserAction } from '@/actions/users'
 import Button from '@/components/button'
 import accountService from '@/services/account-service'
 import { useRouter } from 'next/navigation'
@@ -14,12 +15,13 @@ const ButtonConfirm = ({ id }: Props) => {
 
   // Handle delete user
   const handleDeleteUser = async () => {
-    const payload = { userId: id }
+    // const payload = { userId: id }
     try {
-      const res = await accountService.deleteUser(payload)
+      // const res = await accountService.deleteUser(payload)
+      const res = await deleteUserAction(id)
 
       // Notification
-      toast.success(res.message || 'Deleted user is successfully.')
+      toast.success(res?.message || 'Deleted user is successfully.')
 
       // Navigate to user list page
       router.push('/admin/users')
